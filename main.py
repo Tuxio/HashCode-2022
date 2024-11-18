@@ -6,6 +6,7 @@ def assign_contributors_to_projects(contributors, projects):
     projects.sort(key=lambda p: (p.best_before, -p.score))
 
     assignments = []
+    score = 0
     project_start_time = 0
     i = 0
     while (any(p.archived == False for p in projects) and i < 100):
@@ -54,9 +55,12 @@ def assign_contributors_to_projects(contributors, projects):
             else:
                 # Nur wenn einem Projekt alle Rollen zugeordnet wurden, das Projekt hinzufuegen
                 project.archived = True
-                assignments.append((project.name, [c.name for c in roles_filled], project_start_time))
+                score_gained = max(0, project.score - (project_start_time + project.days - project.best_before)) \
+                    if (project_start_time > project.best_before) else project.score
+                score += score_gained
+                assignments.append((project.name, [c.name for c in roles_filled], project_start_time, score_gained))
 
-    return assignments
+    return assignments, score
 
 
 if __name__ == '__main__':
@@ -71,12 +75,13 @@ if __name__ == '__main__':
     for project in projects:
         print(project)
 
-    result = assign_contributors_to_projects(contributors, projects)
+    result, score = assign_contributors_to_projects(contributors, projects)
 
     print(len(result))
-    for project_name, contributor_names, time_start in result:
-        print(project_name, time_start)
+    for project_name, contributor_names, time_start, score_gained in result:
+        print(project_name, time_start, score_gained)
         print(" ".join(contributor_names))
+    print(score)
 
     print("Contributors mit neu erworbenen skills:")
     for contributor in contributors:
