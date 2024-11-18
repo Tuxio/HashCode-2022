@@ -1,6 +1,7 @@
 from read_inputs import parse_input_file
 
-
+# todo:
+#  Not possessing a skill is equivalent to possessing a skill at level 0. So a contributor can work on a project and be assigned to a role with requirement C++ level 1 if they don’t know any C++, provided that somebody else on the team knows C++ at level 1 or higher.
 def assign_contributors_to_projects(contributors, projects):
     # zuerst nach best_before, dann nach score sortieren
     projects.sort(key=lambda p: (p.best_before, -p.score))
@@ -16,6 +17,7 @@ def assign_contributors_to_projects(contributors, projects):
                 continue;
 
             roles_filled = []
+            mentor_list = []
 
             # Ueberpruefen, ob es Rollen gibt, die zu dem aktuellen Projekt passen
             for role in project.roles:
@@ -35,7 +37,10 @@ def assign_contributors_to_projects(contributors, projects):
                                 c.skills.get(skill, 0) >= level_required for c in contributors if c != contributor
                             )
                             if mentor_present:
-                                # todo evtl hier auch den mentor als candidate angeben
+
+                                for mentor in contributors:
+                                    if mentor.skills.get(skill, 0) >= level_required and mentor != contributor:
+                                        mentor_list.append(mentor)
                                 candidate = contributor
                                 break
 
@@ -44,11 +49,10 @@ def assign_contributors_to_projects(contributors, projects):
 
                     project_start_time = max(project_start_time, candidate.available_at)
 
-                    # Skill verbessern wenn ein contributer einen mentor besitzt
-                    if candidate.skills.get(skill, 0) == level_required - 1:
-                        candidate.skills[skill] = level_required
+                    # Skill verbessern
+                    if (not mentor_present or candidate in mentor_list) and skill in candidate.skills:
+                        candidate.skills[skill] = candidate.skills[skill] + 1
                     candidate.available_at = project_start_time + project.days
-                    candidate.skills[skill] = candidate.skills[skill] + 1 # todo bei jedem richtig??
                 else:
                     # Projekt skippen, wenn es keine Rolle gibt, die mit diesem Projekt besetzt werden kann
                     break
@@ -64,7 +68,7 @@ def assign_contributors_to_projects(contributors, projects):
 
 
 if __name__ == '__main__':
-    file_path = 'input_data/a_an_example.in.txt'
+    file_path = 'input_data/b_better_start_small.in.txt'
     contributors, projects = parse_input_file(file_path)
 
     print("Contributors:")
@@ -83,6 +87,6 @@ if __name__ == '__main__':
         print(" ".join(contributor_names))
     print(score)
 
-    print("Contributors mit neu erworbenen skills:")
-    for contributor in contributors:
-        print(contributor)
+    # print("Contributors mit neu erworbenen skills:")
+    # for contributor in contributors:
+    #     print(contributor)
