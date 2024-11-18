@@ -2,6 +2,7 @@ from read_inputs import parse_input_file
 
 # todo:
 #  Not possessing a skill is equivalent to possessing a skill at level 0. So a contributor can work on a project and be assigned to a role with requirement C++ level 1 if they don’t know any C++, provided that somebody else on the team knows C++ at level 1 or higher.
+# i < 100 löschen
 def assign_contributors_to_projects(contributors, projects):
     # zuerst nach best_before, dann nach score sortieren
     projects.sort(key=lambda p: (p.best_before, -p.score))
@@ -68,7 +69,7 @@ def assign_contributors_to_projects(contributors, projects):
 
 
 if __name__ == '__main__':
-    file_path = 'input_data/b_better_start_small.in.txt'
+    file_path = 'input_data/c_collaboration.in.txt'
     contributors, projects = parse_input_file(file_path)
 
     print("Contributors:")
