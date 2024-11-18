@@ -6,13 +6,13 @@ def parse_input_file(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
-    c, p = map(int, lines[0].strip().split())
+    c_count, p_count = map(int, lines[0].strip().split())
     contributors = []
     projects = []
     index = 1
 
     # contributors
-    for _ in range(c):
+    for _ in range(c_count):
         name, n = lines[index].strip().split()
         n = int(n)
 
@@ -25,7 +25,7 @@ def parse_input_file(file_path):
         contributors.append(Contributor(name, skills))
 
     # projects
-    for _ in range(p):
+    for _ in range(p_count):
         name, days, score, best_before, roles = lines[index].strip().split()
         days, score, best_before, roles = map(int, [days, score, best_before, roles])
         index += 1
