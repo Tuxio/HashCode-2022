@@ -41,7 +41,7 @@ def assign_contributors_to_projects(contributors, projects):
                             if mentor_present:
                                 for mentor in contributors:
                                     if mentor.skills.get(skill, 0) >= level_required and mentor != contributor:
-                                        mentor_list_to_role.append({mentor: mentor, skill: skill})
+                                        mentor_list_to_role.append({'mentor': mentor, 'skill': skill})
                                 candidate = contributor
                             break
 
@@ -64,7 +64,7 @@ def assign_contributors_to_projects(contributors, projects):
                 for c in roles_filled:
                     for cs in c.skills:
                         if any(rs['skill'] == cs for rs in project.roles):
-                            is_mentor = any(ms.mentor == c for ms in mentor_list_to_role)
+                            is_mentor = any(ms['mentor'] == c for ms in mentor_list_to_role)
 
                             # Skill verbessern
                             for pr in project.roles:
@@ -98,6 +98,6 @@ if __name__ == '__main__':
         print(" ".join(contributor_names))
     print(score)
 
-    print("Contributors mit neu erworbenen skills:")
+    print("\nContributors mit neu erworbenen skills:")
     for contributor in contributors:
         print(contributor)
