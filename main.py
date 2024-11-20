@@ -1,5 +1,6 @@
 from read_inputs import parse_input_file
 
+
 # todo:
 #  Not possessing a skill is equivalent to possessing a skill at level 0. So a contributor can work on a project and be assigned to a role with requirement C++ level 1 if they don’t know any C++, provided that somebody else on the team knows C++ at level 1 or higher.
 def assign_contributors_to_projects(contributors, projects):
@@ -12,7 +13,7 @@ def assign_contributors_to_projects(contributors, projects):
     while len(days) > 0:
         day = min(days)
         days.remove(day)
-        print(f"Tag: {day} {days}")
+
         for project in projects:
             print(f"""project: {project.name}""")
             if project.archived:
@@ -50,7 +51,7 @@ def assign_contributors_to_projects(contributors, projects):
                     # Projekt skippen, wenn es keine Rolle gibt, die mit diesem Projekt besetzt werden kann
                     break
             else:
-            # if len(roles_filled) > 0:
+                # if len(roles_filled) > 0:
                 # Nur wenn einem Projekt alle Rollen zugeordnet wurden, das Projekt hinzufuegen
                 project.archived = True
                 end_day = day + project.days
@@ -62,27 +63,18 @@ def assign_contributors_to_projects(contributors, projects):
                 # Skill und available day fuer die candidates, die am Projekt teilnehmen anpassen
                 for c in roles_filled:
                     for cs in c.skills:
-                        # test = lambda (project.roles) : (project.roles['skill'])
-                        skill_is_needed = any(
-                            rs['skill'] == cs for rs in project.roles
-                        )
-                        if skill_is_needed:
+                        if any(rs['skill'] == cs for rs in project.roles):
+                            is_mentor = any(ms.mentor == c for ms in mentor_list_to_role)
 
-                            is_mentor = False
                             # Skill verbessern
-                            for ms in mentor_list_to_role:
-                                if ms.mentor == c:
-                                    is_mentor = True
-
                             for pr in project.roles:
                                 if pr['skill'] == cs:
+                                    # Nur leveln, wenn der aktuelle contributor (c) kein Mentor ist und sein skill level <= dem reqired skill level des Projektes ist
                                     if not is_mentor and c.skills[cs] <= pr['level']:
                                         c.skills[cs] = c.skills[cs] + 1
                                     c.available_at = day + project.days
 
-
                 days.add(end_day)
-        print(f"sdsad {days}")
     return assignments, score
 
 
