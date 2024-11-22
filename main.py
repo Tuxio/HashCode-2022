@@ -49,6 +49,8 @@ def assign_contributors_to_projects(contributors, projects):
                 else:
                     # Projekt skippen, wenn es keine Rolle gibt, die mit diesem Projekt besetzt werden kann
                     break
+            # if len(roles_filled) == len(project.roles) Wenn alle rollen durchgelaufen sind und kein break
+            # durchgeführt wurde, wird in den else-Zweig gegangen, um das Projekt als abgeschlossen zu markieren.
             else:
                 # if len(roles_filled) > 0:
                 # Nur wenn einem Projekt alle Rollen zugeordnet wurden, das Projekt hinzufuegen
@@ -74,6 +76,7 @@ def assign_contributors_to_projects(contributors, projects):
                                     c.available_at = day + project.days
 
                 days.add(end_day)
+                break # durch den break wird es greedy
     return assignments, score
 
 
