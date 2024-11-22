@@ -1,8 +1,8 @@
 from read_inputs import parse_input_file
-
+import time
 
 # todo:
-#  Not possessing a skill is equivalent to possessing a skill at level 0. So a contributor can work on a project and be assigned to a role with requirement C++ level 1 if they don’t know any C++, provided that somebody else on the team knows C++ at level 1 or higher.
+#  Not possessing a skill is equivalent to possessing a skill at level 0. So .
 def assign_contributors_to_projects(contributors, projects):
     # zuerst nach best_before, dann nach score sortieren
     projects.sort(key=lambda p: (p.best_before, -p.score))
@@ -34,7 +34,8 @@ def assign_contributors_to_projects(contributors, projects):
                         if contributor.skills.get(skill, 0) >= level_required:
                             candidate = contributor
                             break
-                        elif contributor.skills.get(skill, 0) == level_required - 1:
+                        # Mentor suchen fuer Leute, die einen Skill {level_required -1} besitzen
+                        elif level_required == 1 or contributor.skills.get(skill, 0) == level_required - 1:
                             mentor_present = any(
                                 c.skills.get(skill, 0) >= level_required for c in contributors if c != contributor
                             )
@@ -90,7 +91,13 @@ if __name__ == '__main__':
     for project in projects:
         print(project)
 
+    start_time = time.time()
+
     result, score = assign_contributors_to_projects(contributors, projects)
+
+    end_time = time.time()
+
+    print(f"Runtime: {end_time - start_time}")
 
     print(len(result))
     for project_name, contributor_names, time_start, end_day, score_gained in result:
