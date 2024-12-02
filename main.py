@@ -1,8 +1,6 @@
 from read_inputs import parse_input_file
 import time
 
-# todo:
-#  Not possessing a skill is equivalent to possessing a skill at level 0. So .
 def assign_contributors_to_projects(contributors, projects):
     # zuerst nach best_before, dann nach score sortieren
     projects.sort(key=lambda p: (p.best_before, -p.score))
@@ -80,7 +78,7 @@ def assign_contributors_to_projects(contributors, projects):
 
 
 if __name__ == '__main__':
-    file_path = 'input_data/b_better_start_small.in.txt'
+    file_path = 'input_data/a_an_example.in.txt'
     contributors, projects = parse_input_file(file_path)
 
     print("Contributors:")
