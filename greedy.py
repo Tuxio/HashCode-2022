@@ -7,10 +7,12 @@ def assign_contributors_to_projects(contributors, projects):
 
     assignments = []
     score = 0
-    days = set([0])
-    while len(days) > 0:
-        day = min(days)
-        days.remove(day)
+    found_project = True
+    day = 0
+    # Solange iterieren, bis zu einem Projekt keine Contributors mit passenden Rollen/zu passenden Zeitpunkten
+    # gefunden werden können
+    while found_project:
+        found_project = False
 
         for project in projects:
             print(f"""project: {project.name}""")
@@ -49,6 +51,8 @@ def assign_contributors_to_projects(contributors, projects):
                 else:
                     # Projekt skippen, wenn es keine Rolle gibt, die mit diesem Projekt besetzt werden kann
                     break
+            # if len(roles_filled) == len(project.roles) Wenn alle rollen durchgelaufen sind und kein break
+            # durchgeführt wurde, wird in den else-Zweig gegangen, um das Projekt als abgeschlossen zu markieren.
             else:
                 # if len(roles_filled) > 0:
                 # Nur wenn einem Projekt alle Rollen zugeordnet wurden, das Projekt hinzufuegen
@@ -73,7 +77,9 @@ def assign_contributors_to_projects(contributors, projects):
                                         c.skills[cs] = c.skills[cs] + 1
                                     c.available_at = day + project.days
 
-                days.add(end_day)
+                day = end_day
+                found_project = True
+                break # durch den break wird es greedy
     return assignments, score
 
 
